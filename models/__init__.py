@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""This module instantiates an object of class FileStorage and Database storage"""
+"""This module instantiates an object of class
+FileStorage and Database storage"""
+
 from models.engine.file_storage import FileStorage
 from models.engine.db_storage import DBStorage
 from os import getenv
