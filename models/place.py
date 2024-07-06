@@ -4,6 +4,16 @@ from models.base_model import Base, BaseModel
 from sqlalchemy import Column, Integer, String, ForeignKey, Float
 import models
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60), ForeignKey('places.id'),
+                             primary_key=True, nullable=False),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True, nullable=False)
+                      )
 
 
 class Place(BaseModel, Base):
@@ -21,6 +31,9 @@ class Place(BaseModel, Base):
     longitude = Column(Float)
     review = relationship('Review', cascade='all, delete, delete-orphan',
                           backref='place')
+    amenities = relationship('Amenity', secondary=place_amenity,
+                             viewonly=False,
+                             back_populates='place_amenities')
 
     @property
     def reviews(self):
@@ -33,3 +46,25 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     review_list.append(review)
             return review_list
+
+    @property
+    def amenity(self):
+        """Getter attribute amenities that returns the list of Amenity"""
+        if getenv("HBNB_TYPE_STORAGE") == "db":
+            return self.amenities
+        else:
+            amenity_list = []
+            for amenity in models.storage.all(Amenity).values():
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            return amenity_list
+
+    @amenities.setter
+    def amenities(self, obj):
+        """Setter attribute amenities that handles
+        append method for adding an Amenity.id"""
+        if getenv("HBNB_TYPE_STORAGE") != "db" and isinstance(obj, Amenity):
+            if 'amenity_ids' not in self.__dict__:
+                self.amenity_ids = []
+            if obj.id not in self.amenity_ids:
+                self.amenity_ids.append(obj.id)
