@@ -27,5 +27,6 @@ def do_deploy(archive_path):
         run("sudo rm -rf /data/web_static/current")
         run("sudo ln -s {} /data/web_static/current".format(new_folder))
         return True
-    except:
+    except Exception as e:
+        print("An error occured: {}".format(e))
         return False
