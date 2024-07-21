@@ -29,11 +29,11 @@ def do_deploy(archive_path):
 
     try:
         # Get the filename without extension
-        filename = os.path.basename(archive_path)
+        filename = archive_path.split("/")[-1]
         file_without_ext = filename.split('.')[0]
 
         put(archive_path, '/tmp/')
-        new_folder = ("/data/web_static/releases/{}".format(file_without_ext))
+        new_folder = ("/data/web_static/releases/ + {}".format(file_without_ext))
         run("sudo mkdir -p {}".format(new_folder))
         run("sudo tar -xzf /tmp/{} -C {}".format(filename, new_folder))
         run("sudo rm /tmp/{}".format(filename))
@@ -42,8 +42,7 @@ def do_deploy(archive_path):
         run("sudo rm -rf /data/web_static/current")
         run("sudo ln -s {} /data/web_static/current".format(new_folder))
         return True
-    except Exception as e:
-        print("An error occured: {}".format(e))
+    except:
         return False
 
 
