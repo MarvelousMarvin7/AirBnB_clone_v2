@@ -24,23 +24,26 @@ def do_pack():
 
 def do_deploy(archive_path):
     """deploy acrhived .tgz to webservers"""
-    if (os.path.isfile(archive_path) is False):
+    if not os.path.exists(archive_path):
         return False
 
     try:
         # Get the filename without extension
-        filename = archive_path.split("/")[-1]
-        new_folder = ("/data/web_static/releases/" + filename.split(".")[0])
-        put(archive_path, "/tmp/")
-        run("mkdir -p {}".format(new_folder))
-        run("tar -xzf /tmp/{} -C {}".format(filename, new_folder))
-        run("rm /tmp/{}".format(filename))
-        run("mv {}/web_static/* {}/".format(new_folder, new_folder))
-        run("rm -rf {}/web_static".format(new_folder))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {} /data/web_static/current".format(new_folder))
+        filename = os.path.basename(archive_path)
+        file_without_ext = filename.split(".")[0]
+
+        put(archive_path, '/tmp/')
+        new_folder = ("/data/web_static/releases/{}".format(file_without_ext))
+        run("sudo mkdir -p {}".format(new_folder))
+        run("sudo tar -xzf /tmp/{} -C {}".format(filename, new_folder))
+        run("sudo rm /tmp/{}".format(filename))
+        run("sudo mv {}/web_static/* {}/".format(new_folder, new_folder))
+        run("sudo rm -rf {}/web_static".format(new_folder))
+        run("sudo rm -rf /data/web_static/current")
+        run("sudo ln -s {} /data/web_static/current".format(new_folder))
         return True
-    except:
+    except Exception as e:
+        print("An error occured: {}".format(e))
         return False
 
 
