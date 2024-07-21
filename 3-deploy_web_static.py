@@ -4,7 +4,7 @@
 """
 
 from fabric.api import *
-from fabric.operations import run, put, sudo
+from fabric.operations import local, run, put, sudo
 import os.path
 import time
 env.hosts = ['3.85.196.66', '54.175.225.232']
