@@ -8,6 +8,7 @@ import time
 
 
 def do_pack():
+    """generates a .tgz archive"""
     timeset = time.strftime("%Y%m%d%H%M%S")
     try:
         local("mkdir -p versions")
