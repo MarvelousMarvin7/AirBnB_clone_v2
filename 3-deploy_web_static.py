@@ -18,8 +18,7 @@ def do_pack():
         local("tar -cvzf versions/web_static_{}.tgz web_static/".
               format(timeset))
         return ("versions/web_static_{}.tgz".format(timeset))
-    except Exception as e:
-        print("An error occured: {}".format(e))
+    except:
         return None
 
 
@@ -51,12 +50,8 @@ def do_deploy(archive_path):
 def deploy():
     """deploy fully"""
     try:
-        archive_address = do_pack()
-        if archive_address:
-            return do_deploy(archive_address)
-        else:
-            print("Archive creation failed")
-            return False
+        path = do_pack()
+        return do_deploy(path)
     except Exception as e:
         print("An error occured durring deploying process: {}".format(e))
         return False
