@@ -51,6 +51,10 @@ def deploy():
     """deploy fully"""
     try:
         path = do_pack()
+
+        if path is None:
+            return False
+
         return do_deploy(path)
     except Exception as e:
         print("An error occured durring deploying process: {}".format(e))
