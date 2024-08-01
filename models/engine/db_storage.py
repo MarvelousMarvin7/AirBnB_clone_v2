@@ -75,4 +75,5 @@ class DBStorage:
 
     def close(self):
         """calls remove"""
-        self.__session.close()
+        if self.__session:
+            self.__session.remove()
