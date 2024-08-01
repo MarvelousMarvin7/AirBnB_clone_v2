@@ -35,7 +35,7 @@ class Place(BaseModel, Base):
         """Returns the lisst of Review instances"""
         review_list = []
         if getenv('HBNB_TYPE_STORAGE') == 'db':
-            return self.reviews
+            return self.review
         else:
             for review in models.storage.all(Review).values():
                 if review.place_id == self.id:

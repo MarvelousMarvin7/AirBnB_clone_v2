@@ -18,10 +18,9 @@ def close_db(exc):
 @app.route('/states_list')
 def states_list():
     """ display a HTML page: (inside the tag BODY)"""
-    states = storage.all(Stat).values()
+    states = storage.all(State).values()
     return render_template('7-states_list.html', states=states)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
